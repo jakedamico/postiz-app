@@ -671,9 +671,18 @@ export class InstagramProvider
               )}`
             : ``;
 
+        // Keep reels off the main feed when explicitly disabled. Only valid on
+        // a REELS container (single video); omitted everywhere else, so other
+        // media types and the default in-feed behavior stay byte-identical.
+        const shareToFeed =
+          firstPost?.settings?.share_to_feed === false &&
+          mediaType.includes('media_type=REELS')
+            ? `&share_to_feed=false`
+            : ``;
+
         const { id: photoId } = await (
           await this.fetch(
-            `https://${type}/v20.0/${id}/media?${mediaType}${isCarousel}${collaborators}${trialParams}${audioConfiguration}&access_token=${accessToken}${caption}`,
+            `https://${type}/v20.0/${id}/media?${mediaType}${isCarousel}${collaborators}${shareToFeed}${trialParams}${audioConfiguration}&access_token=${accessToken}${caption}`,
             {
               method: 'POST',
             }

@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import {
   IsArray,
+  IsBoolean,
   IsDefined,
   IsIn,
   IsNumber,
@@ -70,4 +71,11 @@ export class InstagramDto {
   @ValidateNested()
   @IsOptional()
   audio?: InstagramAudio;
+
+  // Reels only: set false to keep the reel off the main home feed (it still
+  // appears on the Reels tab + profile). Omitted/true preserves Instagram's
+  // default (also shown in the feed). Forwarded by the patched provider.
+  @IsOptional()
+  @IsBoolean()
+  share_to_feed?: boolean;
 }
