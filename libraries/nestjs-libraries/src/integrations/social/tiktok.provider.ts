@@ -411,7 +411,7 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
     accessToken: string
   ): Promise<{ url: string; id: string }> {
     // eslint-disable-next-line no-constant-condition
-    while (true) {
+    for (const i of Array(600).keys()) {
       const post = await (
         await this.fetch(
           'https://open.tiktokapis.com/v2/post/publish/status/fetch/',
@@ -462,8 +462,15 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
         );
       }
 
-      await timer(10000);
+      await timer(20000);
     }
+
+    throw new BadBody(
+      'titok-error-upload',
+      JSON.stringify({}),
+      Buffer.from(JSON.stringify({})),
+      'TikTok refused to publish your post'
+    );
   }
 
   private postingMethod(
